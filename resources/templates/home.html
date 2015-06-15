@@ -1,14 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="jumbotron">
-    <h1>Welcome to register-browser</h1>
-    <p>Time to start building your site!</p>
-    <p><a class="btn btn-primary btn-lg" href="http://luminusweb.net">Learn more &raquo;</a></p>
+<div class="row">
+  <div class="small-12 large-8 columns">
+    <div class="official-text">
+      @Html(register.officialText())
+    </div>
+    <div class="registry">
+      <p class="registry-label">Provided by:</p>
+      @if(register.crestName()) {
+      <img class="crest" src="@routes.Assets.at({s"images/crests/${register.crestName}.png"})" style="border-color: @register.officialColour()"/>
+      <span class="registry-with-crest"><a href="https://www.gov.uk/government/organisations/@register.registry()">@Html(register.registryName())</a></span>
+      } else {
+      <span class="registry-no-crest"><a href="https://www.gov.uk/government/organisations/@register.registry()">@Html(register.registryName())</a></span>
+      }
+
+    </div>
+
+    <div class="meta-entries">
+
+      <p class="label-text">Total entries:</p>
+      <p class="big-number">
+        <a href=@controllers.api.routes.Rest.all("", controllers.api.Pager.DEFAULT_PAGER)>@count </a>
+      </p>
+
+      <p class="label-text">Last updated:</p>
+      <p class="big-meta">
+        <a href=@controllers.api.routes.Rest.latest("", controllers.api.Pager.DEFAULT_PAGER)>@lastUpdated</a>
+      </p>
+
+      <p class="label-text">
+        Fields in this register:</p><p class="homepage-field-labels">@Html(register.fields.map(f => controllers.html.Utils.toLink(f).body).mkString(", "))</p>
+    </div>
+
+    @copyright(register)
+
   </div>
 
-  <div class="row">
-    <div class="span12">
-    {{docs|markdown}}
-    </div>
+  <div class="small-12 large-4 columns nav">
+
+    <h4>Search register entries</h4>
+    <p>@play.Play.application().configuration().getString("register.searchtext")</p>
+
+    <form action="/search">
+      <div class="row collapse">
+        <div class="small-8 large-11 columns">
+          <input name="_query" type="text" placeholder="Enter search term">
+
+          <!-- ./columns -->
+          <input type="submit" value="Search" class="button postfix" />
+        </div>
+      </div>
+    </form>
+
+    <ul class="side-nav">
+      <li><a href="http://www.openregister.org/">About registers</a></li>
+      <li><a href="http://www.openregister.org/developer">Developer documentation</a></li>
+      <li><a href="/download">Download all entries</a></li>
+    </ul>
+
+
   </div>
+</div>
 {% endblock %}

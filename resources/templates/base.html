@@ -1,46 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Welcome to register-browser</title>
-  </head>
-  <body>
-    <!-- navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="{{servlet-context}}/">register-browser</a>
-        </div>
-        <div class="navbar-collapse collapse ">
-          <ul class="nav navbar-nav">
-            <li {% ifequal page "home.html" %} class="active"{%endifequal%}>
-              <a href="{{servlet-context}}/">Home</a>
-            </li>
-            <li {% ifequal page "about.html" %} class="active"{%endifequal%}>
-              <a href="{{servlet-context}}/about">About</a>
-            </li>
-          </ul>
-        </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="/img/icon.png" />
+
+    <title>TODO</title>
+    {% style "/css/vendor/foundation.css" %}
+    {% style "/css/main.css" %}
+
+</head>
+<body>
+  <div id="header-wrapper">
+
+    <div class="row">
+      <div class="header registry small-12 large-12 columns">
+        <nav class="top-bar" data-topbar>
+          <h1><a href="/">Register browser</a></h1>
+        </nav>
       </div>
     </div>
+  </div>
 
-    <div class="container">
-      {% block content %}
-      {% endblock %}
+  <div class="row">
+    <div class="small-12 large-12 columns">
+
+      <div id="phase-banner">
+        <p>
+          <span class="alpha-phase label">ALPHA</span>
+          <span class="alpha-description">This is a prototype</span>
+        </p>
+        <hr>
+      </div>
     </div>
-    <!-- scripts and styles -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-    {% style "/css/screen.css" %}
+  </div>
+  {% block content %}
+  {% endblock %}
 
-    <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript">
-      var context = "{{servlet-context}}";
-    </script>
-    {% block page-scripts %}
-    {% endblock %}
-  </body>
+  <div class="footer-wrapper">
+    <div class="row footer">
+
+      <div class="large-10 columns">
+	<div class="open-government-licence">
+	  <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a></p>
+	  <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated</p>
+	</div>
+      </div>
+
+      <div class="large-2 columns">
+	<div class="copyright">
+	  <img src="/img/govuk_crest_grey.png"/>
+	  <p>© Crown copyright</p>
+	</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+</body>
 </html>
-

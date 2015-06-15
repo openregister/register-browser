@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="small-12 large-8 columns">
+    <h1 class="entry-header">{{record.name}}</h1>
+    <p class="entry-source">An entry in the <a href="{{register.url}}">{{register.friendly-name}} register</a></p>
+    <p class="entry-hash">hash: {{record.hash}} <a href="#" class="tooltips"><span class="tooltips-icon">?</span><span class="tooltips-text">The hash is a unique identifier for each version of a record</span></a></p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 large-12 columns">
+    <table id="entry-table">
+      <tbody>
+        {% for field in record.fields %}
+        <tr>
+          <td class="{{field}}"><a class="link_to_register" href="/field/{{field}}">{{field}}</a></td>
+          <td class="{{field}}">TODO domain-specific rendering of value here</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div> <!-- /.columns -->
+</div> <!-- /.row -->
+
+<div class="row">
+  <div class="small-12 large-6 columns">
+    <p class="data-representations">This data is available as:
+      <span>
+        {% for representation in representations %}
+        <a href="{{representation.url}}" rel="alternate">{{representation.name}}</a>, 
+        {% endfor %}
+      </span>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-12 large-12 columns">
+    <div class="history">
+      <!-- TODO: show registers using a field, on field register and visit register link on register register-->
+
+      <div class="section">
+        <h2>History</h2>
+
+        <h3>Latest version:</h3>
+        <p><a href="{{record.latest-version-url}}">{{record.latest-version-url}}</a></p>
+        <h3>This version:</h3>
+
+        <p><a href="/hash/{{record.hash}}">{{record.hash}}</a>
+          {{record.last-updated|date:"dd MMMM yy HH:mm:ss z"}}</p>
+        {% if history|not-empty %}
+        <h3>Previous versions:</h3>
+        <table id="history" class="responsive">
+          <thead>
+            <tr>
+              <td>hash</td>
+              <td>timestamp</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in history %}
+            <tr>
+              <td><span class="field-name">hash</span><span class="field-value"><a href="/hash/{{entry.hash}}">{{entry.hash}}</a></span></td>
+              <td><span class="field-name">timestamp</span><span class="field-value">{{entry.timestamp|date:"dd MMMM yyyy"}}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if register.copyright %}
+    <div class="copyright">
+      <p class="label-text">Copyright:</p>
+      <div class="copyright-details">{{register.copyright}}</div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
