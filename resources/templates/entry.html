@@ -14,13 +14,12 @@
   <div class="small-12 large-12 columns">
     <table id="entry-table">
       <tbody>
-        {% for field,value in record.entry %}
+        {% for field,value in record.rendered %}
         <tr>
-          <td class="{{field|name}}"><a class="link_to_register" href="/field/{{field|name}}">{{field|name}}</a></td>
-          <td class="{{field|name}}">{{value}}</td>
+          <td class="{{field}}"><a class="link_to_register" href="/field/{{field}}">{{field}}</a></td>
+          <td class="{{field}}">{{value}}</td>
         </tr>
         {% endfor %}
-
       </tbody>
     </table>
   </div> <!-- /.columns -->

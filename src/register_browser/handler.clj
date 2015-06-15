@@ -51,8 +51,6 @@
     [:shared-appender-config :rotor]
     {:path "register_browser.log" :max-size (* 512 1024) :backlog 10})
 
-  (add-filter! :name name)
-
   (if (env :dev) (parser/cache-off!))
   (start-nrepl)
   ;;start the expired session cleanup job
