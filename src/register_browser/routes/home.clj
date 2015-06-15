@@ -4,7 +4,8 @@
             [ring.util.http-response :refer [ok]]
             [clojure.java.io :as io]
             [cheshire.core :as json]
-            [markdown.core :refer [md-to-html-string]]))
+            [markdown.core :refer [md-to-html-string]])
+  (:import [java.net URLEncoder]))
 
 
 (defn entry-page [register record history]
@@ -15,7 +16,7 @@
                  :representations [{:name "ttl" :url "foo.ttl"}]}))
 
 (defn render-curie [register value]
-  (str "http://" register ".openregister.org/" register "/" value ".json"))
+  (str "http://" register ".openregister.org/" (URLEncoder/encode register) "/" (URLEncoder/encode value) ".json"))
 
 (defn render-as [field value]
   (condp = (:datatype field)
@@ -29,13 +30,15 @@
               :let [field (:entry (json/parse-stream (clojure.java.io/reader (render-curie "field" field-name)) true))]]
           [field-name (render-as field value)])))
 
-(defroutes home-routes
+(defn fetch-curie [register value]
+  (json/parse-stream (clojure.java.io/reader (render-curie register value)) true))
 
+(defroutes home-routes
 
   (GET "/:register/hash/:hash" [register hash]
        (let [json-url (str "http://" register ".openregister.org/hash/" hash ".json")
              record   (json/parse-string (slurp json-url) true)]
-         (entry-page {:name register :copyright "copyright bar"}
+         (entry-page (:entry (fetch-curie "register" register))
                      (assoc record
                        :primary (get-in record [:entry (keyword register)])
                        :rendered (render-entry (:entry record)))
@@ -43,7 +46,7 @@
   (GET "/:register/:value" [register value]
        (let [json-url (render-curie register value)
              record   (json/parse-string (slurp json-url) true)]
-         (entry-page {:name register :copyright "copyright foo"}
+         (entry-page (:entry (fetch-curie "register" register))
                      (assoc record
                        :primary (get-in record [:entry (keyword register)])
                        :rendered (render-entry (:entry record)))
