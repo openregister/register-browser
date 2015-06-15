@@ -22,7 +22,7 @@
   (GET "/" [] (home-page))
   (GET "/about" [] (about-page))
   (GET "/:register/hash/:hash" [register hash]
-       (entry-page {:friendly-name "Public body" :copyright "copyright bar"}
+       (entry-page {:name register :copyright "copyright bar"}
                    {:name "Cabinet office"
                     :fields ["name" "value"]
                     :last-updated (org.joda.time.DateTime.)
@@ -30,7 +30,7 @@
                     :hash hash}
                    []))
   (GET "/:register/:value" [register value]
-       (entry-page {:friendly-name "Public body" :copyright "copyright foo"}
+       (entry-page {:name register :copyright "copyright foo"}
                    {:name "Cabinet office"
                     :fields ["name" "value"]
                     :last-updated (org.joda.time.DateTime.)

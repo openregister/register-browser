@@ -3,7 +3,7 @@
 <div class="row">
   <div class="small-12 large-8 columns">
     <h1 class="entry-header">{{record.name}}</h1>
-    <p class="entry-source">An entry in the <a href="{{register.url}}">{{register.friendly-name}} register</a></p>
+    <p class="entry-source">An entry in the <a href="{{register.url}}">{{register.name|capitalize}} register</a></p>
     <p class="entry-hash">hash: {{record.hash}} <a href="#" class="tooltips"><span class="tooltips-icon">?</span><span class="tooltips-text">The hash is a unique identifier for each version of a record</span></a></p>
   </div>
 </div>
