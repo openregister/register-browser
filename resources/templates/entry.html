@@ -17,7 +17,7 @@
         {% for field,value in record.rendered %}
         <tr>
           <td class="{{field}}"><a class="link_to_register" href="/field/{{field}}">{{field}}</a></td>
-          <td class="{{field}}">{{value}}</td>
+          <td class="{{field}}">{{value|safe}}</td>
         </tr>
         {% endfor %}
       </tbody>
