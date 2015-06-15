@@ -2,7 +2,8 @@
   (:require [register-browser.layout :as layout]
             [compojure.core :refer [defroutes GET]]
             [ring.util.http-response :refer [ok]]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [cheshire.core :as json]))
 
 (defn home-page []
   (layout/render
@@ -22,19 +23,15 @@
   (GET "/" [] (home-page))
   (GET "/about" [] (about-page))
   (GET "/:register/hash/:hash" [register hash]
-       (entry-page {:name register :copyright "copyright bar"}
-                   {:name "Cabinet office"
-                    :fields ["name" "value"]
-                    :last-updated (org.joda.time.DateTime.)
-                    :latest-version-url (str "/" register "/" "fakevalue")
-                    :hash hash}
-                   []))
+       (let [json-url (str "http://" register ".openregister.org/hash/" hash ".json")
+             record   (json/parse-string (slurp json-url) true)]
+         (entry-page {:name register :copyright "copyright bar"}
+                     (assoc record :primary (get-in record [:entry (keyword register)]))
+                     [])))
   (GET "/:register/:value" [register value]
-       (entry-page {:name register :copyright "copyright foo"}
-                   {:name "Cabinet office"
-                    :fields ["name" "value"]
-                    :last-updated (org.joda.time.DateTime.)
-                    :latest-version-url (str "/" register "/" value)
-                    :hash "abcdef123456"}
-                   [])))
+       (let [json-url (str "http://" register ".openregister.org/" register "/" value ".json")
+             record   (json/parse-string (slurp json-url) true)]
+         (entry-page {:name register :copyright "copyright foo"}
+                     (assoc record :primary (get-in record [:entry (keyword register)]))
+                     []))))
 

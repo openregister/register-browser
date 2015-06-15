@@ -8,6 +8,7 @@
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.rotor :as rotor]
             [selmer.parser :as parser]
+            [selmer.filters :refer [add-filter!]]
             [environ.core :refer [env]]
             [clojure.tools.nrepl.server :as nrepl]))
 
@@ -49,6 +50,8 @@
   (timbre/set-config!
     [:shared-appender-config :rotor]
     {:path "register_browser.log" :max-size (* 512 1024) :backlog 10})
+
+  (add-filter! :name name)
 
   (if (env :dev) (parser/cache-off!))
   (start-nrepl)
