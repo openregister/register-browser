@@ -8,6 +8,9 @@
   (:import [java.net URLEncoder]))
 
 
+(def DOMAIN "register.gov.uk")
+
+
 (defn entry-page [register record history]
   (layout/render
    "entry.html" {:register register
@@ -16,7 +19,7 @@
                  :representations [{:name "ttl" :url "foo.ttl"}]}))
 
 (defn render-curie [register value]
-  (str "http://" register ".openregister.org/" (URLEncoder/encode register) "/" (URLEncoder/encode value) ".json"))
+  (str "https://" register "." DOMAIN "/record/" (URLEncoder/encode value) ".json"))
 
 (defn render-as [field value]
   (condp = (:datatype field)
@@ -36,19 +39,20 @@
 (defroutes home-routes
 
   (GET "/:register/hash/:hash" [register hash]
-       (let [json-url (str "http://" register ".openregister.org/hash/" hash ".json")
+       (let [json-url (str "https://" register "." DOMAIN "/item/" hash ".json")
              record   (json/parse-string (slurp json-url) true)]
-         (entry-page (:entry (fetch-curie "register" register))
+         (entry-page (fetch-curie "register" register)
                      (assoc record
-                       :primary (get-in record [:entry (keyword register)])
-                       :rendered (render-entry (:entry record)))
+                       :primary (get record (keyword register))
+                       :rendered (render-entry
+                                  record))
                      [])))
   (GET "/:register/:value" [register value]
        (let [json-url (render-curie register value)
              record   (json/parse-string (slurp json-url) true)]
-         (entry-page (:entry (fetch-curie "register" register))
+         (entry-page (fetch-curie "register" register)
                      (assoc record
-                       :primary (get-in record [:entry (keyword register)])
-                       :rendered (render-entry (:entry record)))
+                       :primary (get record keyword register)
+                       :rendered (render-entry (dissoc record :entry-number :entry-timestamp :item-hash)))
                      []))))
 
